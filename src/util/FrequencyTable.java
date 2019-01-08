@@ -6,10 +6,13 @@ public class FrequencyTable {
         byte value;
         Entry next;
     }
+    //默认桶的代码
     private final int DEFAULT_BUCKET_SIZE = 2 >> 4;
     private Entry[] bucket;
     private int bucketLength;
     private int size;
+    
+    //jdk中的hash函数实现，直接copy的
     static final int hash(byte var0) {
         int var1;
         return  (var1 = var0) ^ var1 >>> 16;
