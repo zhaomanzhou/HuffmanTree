@@ -1,14 +1,16 @@
 package util.map;
-public class BSTMap<K extends Comparable<K>, V> implements Map<K, V> {
+public class BSTMap<K extends  Comparable<K>, V> implements Map<K, V> {
 
-    private class Node{
+    public class Node{
         public K key;
         public V value;
+        public int freq;
         public Node left, right;
 
-        public Node(K key, V value){
+        public Node(K key, V value, int freq){
             this.key = key;
             this.value = value;
+            this.freq = freq;
             left = null;
             right = null;
         }
@@ -34,23 +36,23 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K, V> {
 
     // 向二分搜索树中添加新的元素(key, value)
     @Override
-    public void add(K key, V value){
-        root = add(root, key, value);
+    public void add(K key, V value, int freq){
+        root = add(root, key, value, freq);
     }
 
     // 向以node为根的二分搜索树中插入元素(key, value)，递归算法
     // 返回插入新节点后二分搜索树的根
-    private Node add(Node node, K key, V value){
+    private Node add(Node node, K key, V value, int freq){
 
         if(node == null){
             size ++;
-            return new Node(key, value);
+            return new Node(key, value, freq);
         }
 
         if(key.compareTo(node.key) < 0)
-            node.left = add(node.left, key, value);
+            node.left = add(node.left, key, value, freq);
         else if(key.compareTo(node.key) > 0)
-            node.right = add(node.right, key, value);
+            node.right = add(node.right, key, value, freq);
         else // key.compareTo(node.key) == 0
             node.value = value;
 
@@ -114,6 +116,19 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K, V> {
         return node;
     }
 
+
+    public Node removeMin(){
+        Node node = root;
+        if(node.left == null){
+            Node rightNode = node.right;
+            node.right = null;
+            size --;
+            return rightNode;
+        }
+
+        node.left = removeMin(node.left);
+        return node;
+    }
     // 从二分搜索树中删除键为key的节点
     @Override
     public V remove(K key){
@@ -170,6 +185,34 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K, V> {
             return successor;
         }
     }
+    Integer length = 0;
+    public String toString()
+    {
+
+        return toString(root, length) +"\nlength: " + length/(1024*8) +"kb";
+    }
+
+    public String toString(Node n, Integer i)
+    {
+
+        String result = "";
+        if(n.left != null)
+        {
+            result  += toString(n.left, i);
+        }
+        String s = "key: "+ n.key + " \tfreq: "+n.freq   +"  \tvalue: " + n.value +"\n";
+        length += (n.value + "").length()*n.freq;
+        result += s;
+        if(n.right != null)
+        {
+            result += toString(n.right, i);
+        }
+        return result;
+    }
+
+
+
+
 
 
 }

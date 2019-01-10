@@ -18,6 +18,10 @@ public class BitOutputStream {
     protected int bitsWritten;
     protected int buf;
 
+    private byte[] buffer = new byte[1024];
+    //当前缓冲多少字节
+    private int num = 0;
+
     /**
      * The constructor of BitOutputStream is very
      * similar to FilteredOutputStream.

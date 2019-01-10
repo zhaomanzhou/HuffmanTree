@@ -3,7 +3,7 @@ package util.map;
 public class FrequencyTable {
     public class Entry{
         public byte key;
-        public byte value;
+        public int value;
         public Entry next;
     }
     private final int DEFAULT_BUCKET_SIZE = 2 << 8;
@@ -35,6 +35,7 @@ public class FrequencyTable {
     }
     public void put(byte b)
     {
+
         int index = Math.abs(hash(b)%bucketLength);
         if(bucket[index] == null)
         {

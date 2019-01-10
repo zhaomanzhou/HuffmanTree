@@ -7,7 +7,7 @@ public class Node implements Comparable<Node> {
     //Huffman树的结点值
     private int freq;
 
-    Node left, right;
+    public Node left, right;
 
     public Node() {
     }
@@ -64,5 +64,14 @@ public class Node implements Comparable<Node> {
 
     public void setRight(Node right) {
         this.right = right;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "Node{" +
+                "ch=" + ch +
+                ", freq=" + freq +
+                '}';
     }
 }

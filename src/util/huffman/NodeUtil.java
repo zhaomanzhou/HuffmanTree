@@ -32,6 +32,7 @@ public class NodeUtil {
                     Node n = new Node(e.key, e.value);
                     minPq.enqueue(n);
                     e = e.next;
+                    //System.out.println(n);
                 }
             }
         }
@@ -54,9 +55,9 @@ public class NodeUtil {
      * @param root
      * @return
      */
-    public static Map<Byte, String> buildCode(Node root)
+    public static BSTMap<Byte, String> buildCode(Node root)
     {
-        Map<Byte, String> map = new BSTMap<>();
+        BSTMap<Byte, String> map = new BSTMap<>();
         buildCode(map, root, "");
         return map;
     }
@@ -65,7 +66,7 @@ public class NodeUtil {
     {
         if(x.isLeaf())
         {
-            map.add(x.getCh(), s);
+            map.add(x.getCh(), s, x.getFreq());
             return;
         }
         buildCode(map, x.left, s+"0");
