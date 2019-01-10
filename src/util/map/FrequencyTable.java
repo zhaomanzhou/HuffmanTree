@@ -1,15 +1,17 @@
-package util;
+package util.map;
 
 public class FrequencyTable {
-    private class Entry{
-        byte key;
-        byte value;
-        Entry next;
+    public class Entry{
+        public byte key;
+        public byte value;
+        public Entry next;
     }
-    private final int DEFAULT_BUCKET_SIZE = 2 >> 4;
+    private final int DEFAULT_BUCKET_SIZE = 2 << 8;
     private Entry[] bucket;
     private int bucketLength;
     private int size;
+    private Entry next;
+    private int curIndex;
     static final int hash(byte var0) {
         int var1;
         return  (var1 = var0) ^ var1 >>> 16;
@@ -17,6 +19,7 @@ public class FrequencyTable {
 
     public FrequencyTable()
     {
+        bucketLength = DEFAULT_BUCKET_SIZE;
         init();
     }
     public FrequencyTable(int length)
@@ -32,13 +35,14 @@ public class FrequencyTable {
     }
     public void put(byte b)
     {
-        int index = hash(b)%bucketLength;
+        int index = Math.abs(hash(b)%bucketLength);
         if(bucket[index] == null)
         {
             Entry e = new Entry();
             e.key = b;
             e.value =1;
             bucket[index] = e;
+            size++;
         }else
         {
             Entry e = bucket[index];
@@ -52,6 +56,7 @@ public class FrequencyTable {
                 e1.key = b;
                 e1.value =1;
                 e.next = e1;
+                size++;
             }
         }
     }
@@ -75,6 +80,29 @@ public class FrequencyTable {
         }
     }
 
+    public int size()
+    {
+        return size;
+    }
 
+
+    public Entry[] entrySet()
+    {
+        return bucket;
+    }
+
+
+    //开始遍历
+    public void beginIterator()
+    {
+        curIndex = 0;
+        for(int i = 0; i < bucketLength; i++)
+        {
+            if(bucket[i] != null)
+            {
+
+            }
+        }
+    }
 
 }
