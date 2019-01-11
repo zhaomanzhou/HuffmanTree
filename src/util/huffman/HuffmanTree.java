@@ -24,6 +24,7 @@ public class HuffmanTree {
         {
             f.createNewFile();
         }
+
         FileByteList fbl = new FileByteList(src);
         Node root = NodeUtil.buildTril(fbl);
         Map<Byte, String> byteStringMap = NodeUtil.buildCode(root);
@@ -31,7 +32,7 @@ public class HuffmanTree {
         long length = fbl.getSize();
         writeTrie(root);
         String s = Long.toBinaryString(length);
-        System.out.println(length);
+        //System.out.println(length);
         int binaryLength = s.length();
         for(int i = 0; i < 64-binaryLength; i++)
         {
@@ -58,6 +59,7 @@ public class HuffmanTree {
             //System.out.println(fbl.getSize());
         }
         bos.close();
+        fbl.close();
 
 
     }
@@ -87,7 +89,7 @@ public class HuffmanTree {
                 temp++;
             }
         }
-        System.out.println(binaryLength);
+        //System.out.println(binaryLength);
 
 
         Node cur = root;
@@ -109,6 +111,9 @@ public class HuffmanTree {
                 i++;
             }
         }
+
+        fos.close();
+        bis.close();
 
 
 
@@ -143,61 +148,58 @@ public class HuffmanTree {
         return new Node((byte) -1, 0, readTril(), readTril());
     }
 
-    private void test(String src, String dest) throws IOException
-    {
+
+
+
+    public void compressWithProcess(String src, String dest, Process p) throws IOException {
         bos = new BitOutputStream(new FileOutputStream(dest));
         File f = new File(dest);
         if(!f.exists())
         {
             f.createNewFile();
         }
+        p.add().add().add();
         FileByteList fbl = new FileByteList(src);
+        p.add().add().add();
         Node root = NodeUtil.buildTril(fbl);
         Map<Byte, String> byteStringMap = NodeUtil.buildCode(root);
 
         long length = fbl.getSize();
         writeTrie(root);
-//        String s = Long.toBinaryString(length);
-//
-//        int binaryLength = s.length();
-//        for(int i = 0; i < 64-binaryLength; i++)
-//        {
-//            bos.writeBit(0);
-//        }
+        String s = Long.toBinaryString(length);
+        //System.out.println(length);
+        int binaryLength = s.length();
+        for(int i = 0; i < 64-binaryLength; i++)
+        {
+            bos.writeBit(0);
+        }
 
+        p.add().add().add();
+        for(char c: s.toCharArray())
+        {
+            bos.writeBit((int)c);
+        }
+        fbl.close();
+        p.add();
+        fbl = new FileByteList(src);
 
-//        for(char c: s.toCharArray())
-//        {
-//            bos.writeBit((int)c);
-//        }
+        int i = 0;
+        while(fbl.hasNext())
+        {
+            p.setNum((int) (p.getNum() + (i++/length)*90));
+            byte next = fbl.next();
+            String ss = byteStringMap.get(next);
+            for(char c: ss.toCharArray())
+            {
+                bos.writeBit(Integer.parseInt(c+""));
+                //bos.write();
+            }
+            //System.out.println(fbl.getSize());
+        }
         bos.close();
+        fbl.close();
 
 
     }
 
-    public Node test02(String dest) throws IOException
-    {
-        bis = new BitInputStream(new FileInputStream(dest));
-        Node node = readTril();
-        return node;
-    }
-
-    public static void main(String[] args) throws IOException
-    {
-//        try {
-//            new HuffmanTree().compress("d:/Grass.zip", "d:/2.txt");
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-
-        //new HuffmanTree().depress("d:/2.txt", "d:/3.txt");
-        //new HuffmanTree().test("d:/Grass.zip", "d:/2.txt");
-
-
-//        HuffmanTree huffmanTree = new HuffmanTree();
-//        Node node = huffmanTree.test02("d:/2.txt");
-//        huffmanTree.bos = new BitOutputStream(new FileOutputStream("d:/3.txt"));
-//        huffmanTree.writeTrie(node);
-//        huffmanTree.bos.close();
-    }
 }

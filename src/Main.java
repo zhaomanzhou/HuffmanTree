@@ -50,7 +50,7 @@ public class Main extends JFrame
             {
                 String path = selectedFile.getAbsolutePath();
                 f.depress(path, path.substring(0, path.length()-4));
-                JOptionPane.showMessageDialog(this, "压缩成功");
+                JOptionPane.showMessageDialog(this, "解压缩成功");
             } catch (IOException e1)
             {
                 e1.printStackTrace();

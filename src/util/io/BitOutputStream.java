@@ -18,7 +18,7 @@ public class BitOutputStream {
     protected int bitsWritten;
     protected int buf;
 
-    private byte[] buffer = new byte[1024];
+    private byte[] buffer = new byte[1024*1024];
     //当前缓冲多少字节
     private int num = 0;
 
@@ -65,7 +65,6 @@ public class BitOutputStream {
     public void flush() throws IOException {
         if (bitsWritten > 0)
             flushBitBuffer();
-
         out.flush();
     }
 
@@ -74,12 +73,22 @@ public class BitOutputStream {
      */
     public void close() throws IOException {
         flush();
+        out.write(buffer, 0, num);
         out.close();
     }
 
     protected void flushBitBuffer() throws IOException {
-        out.write(buf);
+        handleBuffer();
         buf = 0;
         bitsWritten = 0;
+    }
+
+    private void handleBuffer() throws IOException {
+        if(num == buffer.length)
+        {
+            out.write(buffer, 0, buffer.length);
+            num = 0;
+        }
+        buffer[num++] = (byte)buf;
     }
 }
